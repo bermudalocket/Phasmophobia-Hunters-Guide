@@ -1,0 +1,26 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"tasks": {
+		"version": "2.0.0",
+		"tasks": [
+			{
+				"label": "database",
+				"type": "shell",
+				"command": "cd db && npm start",
+				"problemMatcher": [
+					"$tsc-watch"
+				],
+				"isBackground": true
+			},
+			{
+				"label": "app",
+				"type": "shell",
+				"command": "cd phasmo && npm start"
+			}
+		]
+	}
+}
