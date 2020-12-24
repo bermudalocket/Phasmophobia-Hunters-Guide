@@ -4,7 +4,7 @@ import { GhostInfoView } from "./GhostInfoView";
 import { GhostTableView } from "./GhostTableView";
 import { HeaderView } from "./HeaderView";
 import { ObjectivesTableView } from "./ObjectivesTableView";
-import { Center, HStack, VStack } from "@chakra-ui/react"
+import { Center, HStack, VStack, Spacer } from "@chakra-ui/react"
 
 type MainViewModel = {
     uuid: string
@@ -27,10 +27,14 @@ export const Main = ({uuid}: MainViewModel) => {
                 <GhostTableView />
                 <VStack>
                     <GhostInfoView />
+                    <Spacer minWidth={25} />
                     <EvidenceTableView />
                 </VStack>
             </HStack>
-            <ObjectivesTableView />
+            <HStack>
+                <ObjectivesTableView />
+
+            </HStack>
         </VStack>
     </>
 

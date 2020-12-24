@@ -1,7 +1,7 @@
 import React from "react";
 import { FC } from "react";
 import { useGameContext } from "../Model/GameContext";
-import { Objective } from "../Model/Objective";
+import { Objective } from "../../../Shared Model/Objective";
 
 interface ObjectiveTableRowViewModel {
     objective: Objective

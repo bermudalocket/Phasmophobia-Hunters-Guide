@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Evidence } from "../Model/Evidence";
+import { Evidence } from "../../../Shared Model/Evidence";
 import { EvidenceTableRowView } from "./EvidenceTableRowView";
 
 export const EvidenceTableView: FC<{}> = () => {

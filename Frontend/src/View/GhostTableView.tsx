@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Ghost } from "../Model/Ghost";
+import { Ghost } from "../../../Shared Model/Ghost";
 import { GhostTableRowView } from "./GhostTableRowView";
 
 export const GhostTableView: FC<{}> = () => {

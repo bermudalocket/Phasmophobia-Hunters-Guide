@@ -1,8 +1,8 @@
 import React from "react";
 import { bool3 } from "../index";
 import { AppState } from "./AppState";
-import { Evidence } from "./Evidence";
-import { Objective } from "./Objective";
+import { Evidence } from "../../../Shared Model/Evidence";
+import { Objective } from "../../../Shared Model/Objective";
 
 // ----------------------------------------------------------------------------
 /**

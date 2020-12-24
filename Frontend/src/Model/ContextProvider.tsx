@@ -1,8 +1,8 @@
 import { AxiosResponse, CancelTokenSource } from "axios";
 import React, { ReactNode, useEffect } from "react";
 import { AppState } from "./AppState";
-import { Evidence } from "./Evidence";
-import { Objective } from "./Objective";
+import { Evidence } from "../../../Shared Model/Evidence";
+import { Objective } from "../../../Shared Model/Objective";
 import { bool3, PG_ADDR } from "../index"
 import { GameContext } from "./GameContext";
 const axios = require("axios").default;

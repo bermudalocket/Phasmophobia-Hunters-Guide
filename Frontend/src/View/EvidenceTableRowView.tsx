@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { useGameContext } from "../Model/GameContext";
-import { Evidence } from "../Model/Evidence";
+import { Evidence } from "../../../Shared Model/Evidence";
 
 interface EvidenceTableRowViewModel {
     evidence: Evidence

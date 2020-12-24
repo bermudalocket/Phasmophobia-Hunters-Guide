@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Objective } from "../Model/Objective";
+import { Objective } from "../../../Shared Model/Objective";
 import { ObjectiveTableRowView } from "./ObjectiveTableRowView";
 
 export const ObjectivesTableView: FC<{}> = () => {

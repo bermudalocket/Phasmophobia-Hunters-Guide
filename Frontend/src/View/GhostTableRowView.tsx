@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { useGameContext } from "../Model/GameContext";
-import { Evidence } from "../Model/Evidence";
-import { Ghost } from "../Model/Ghost";
+import { Evidence } from "../../../Shared Model/Evidence";
+import { Ghost } from "../../../Shared Model/Ghost";
 
 interface GhostTableRowViewModel {
     ghost: Ghost;

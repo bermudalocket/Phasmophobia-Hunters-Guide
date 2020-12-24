@@ -3,6 +3,9 @@ const express = require('express')
 const cors = require('cors')
 const { v4: uuidv4 } = require('uuid')
 
+import { Evidence } from "../Shared Model/Evidence";
+import { Objective } from "../Shared Model/Objective";
+
 // ----------------------------------------------------------------------------
 // CONFIG
 
@@ -37,51 +40,6 @@ client.connect();
 // ----------------------------------------------------------------------------
 // ROUTES
 
-app.post("/api/game/update", async (req, res) => {
-    const now = Date.now();
-    let uuid = req.body.uuid
-    let action = req.body.action
-    try {
-        if (action === "name") {
-            let name = req.body.name;
-            await client.query("UPDATE games SET ghost_name=$1 WHERE uuid=$2", [name, uuid])
-        }
-        if (action === "aloneghost") {
-            let aloneGhost = req.body.aloneghost;
-            await client.query("UPDATE games SET alone_ghost=$1 WHERE uuid=$2", [aloneGhost, uuid])
-        }
-        if (action === "objective") {
-            let objective = req.body.objective;
-            let state = req.body.state;
-            console.debug(`-> Action (${objective} = ${state}) on game with UUID ${uuid}`);
-            await client.query("UPDATE games SET " + objective + "=$1 WHERE uuid=$2", [state, uuid]) // TODO security
-        } else if (action === "evidence") {
-            let evidence = req.body.evidence;
-            switch (evidence) {
-                case "fingerprints":
-                case "emf5":
-                case "freezing":
-                case "orbs":
-                case "ghost_writing":
-                case "spirit_box":
-                    break;
-
-                default: res.send("error"); return;
-            }
-            let state = req.body.state;
-            console.debug(`-> Action (${evidence} = ${state}) on game with UUID ${uuid}`);
-            await client.query("UPDATE games SET " + evidence + "=$1 WHERE uuid=$2", [state, uuid]) // TODO security
-            res.send("OK")
-        }
-    } catch(er) {
-        console.log("error: " + er)
-        res.send("error")
-    }
-    const later = Date.now();
-    console.debug(`STAT|2|${uuid}|${later-now}ms`)
-    console.debug("--> Updated (took " + (later - now) + " ms)")
-})
-
 app.post("/api/game/create", async (req, res) => {
     const now = Date.now();
     const uuid = uuidv4();
@@ -93,7 +51,7 @@ app.post("/api/game/create", async (req, res) => {
         res.send("error")
     }
     const later = Date.now()
-    console.debug(`STAT|3|${uuid}|${later - now}ms`)
+    console.debug(`STAT|1|${uuid}|${later - now}ms`)
 })
 
 app.get("/api/game/:uuid", async (req, res) => {
@@ -111,7 +69,55 @@ app.get("/api/game/:uuid", async (req, res) => {
         res.send(err.stack);
     }
     const later = Date.now();
-    console.debug(`STAT|3|${uuid}|${later - now}ms`)
+    console.debug(`STAT|2|${uuid}|${later - now}ms`)
+})
+
+const updateObjective = (input: string) => {
+    switch (input) {
+
+    }
+}
+
+app.post("/api/game/update", async (req, res) => {
+    const now = Date.now()
+    let uuid = req.body.uuid
+    let action = req.body.action
+    try {
+        if (action === "name") {
+            let name = req.body.name;
+            await client.query("UPDATE games SET ghost_name=$1 WHERE uuid=$2", [name, uuid])
+        }
+        if (action === "aloneghost") {
+            let aloneGhost = req.body.aloneghost;
+            await client.query("UPDATE games SET alone_ghost=$1 WHERE uuid=$2", [req.body.aloneghost, uuid])
+        }
+        if (action === "objective") {
+            let objective = req.body.objective;
+            let state = req.body.state;
+            await client.query("UPDATE games SET " + objective + "=$1 WHERE uuid=$2", [state, uuid]) // TODO security
+        } else if (action === "evidence") {
+            let evidence = req.body.evidence;
+            switch (evidence) {
+                case "fingerprints":
+                case "emf5":
+                case "freezing":
+                case "orbs":
+                case "ghost_writing":
+                case "spirit_box":
+                    break;
+
+                default: res.send("error"); return;
+            }
+            let state = req.body.state;
+            await client.query("UPDATE games SET " + evidence + "=$1 WHERE uuid=$2", [state, uuid]) // TODO security
+            res.send("OK")
+        }
+    } catch(er) {
+        console.log("error: " + er)
+        res.send("error")
+    }
+    const later = Date.now();
+    console.debug(`STAT|3|${uuid}|${later-now}ms`)
 })
 
 app.listen(PORT, function() {

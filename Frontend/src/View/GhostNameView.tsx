@@ -10,11 +10,6 @@ export const GhostNameView: FC<{}> = () => {
 
     return <Input placeholder="Name"
                   value={context.gameState.ghostName}
-                  onChange={async (e) => {
-                      let start = Date.now()
-                      console.log("Change detected")
-                      context.setGhostName(e.target.value)
-                      let end = Date.now()
-                      console.log(`Took ${end-start} ms.`)
-                  }} />
+                  onChange={ async (e) => context.setGhostName(e.target.value) } />
+
 }
