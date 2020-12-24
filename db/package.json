@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "source ~/.constants && node index.js"
+    "start": ". ~/.constants && node index.js"
   },
   "author": "",
   "license": "ISC",
