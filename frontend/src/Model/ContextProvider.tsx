@@ -15,29 +15,28 @@ export const ContextProvider = ({children}: ContextProviderModel) => {
 
     const [gameState, setGameState] = React.useState(new AppState())
 
-    let cancellables: CancelTokenSource[] = []
+    let ghostNameIsDirty = false
 
     const setGhostName = async (name: string) => {
         try {
-            cancellables.forEach(c => { c.cancel() })
-            cancellables = []
-            const token = axios.CancelToken.source()
-            cancellables.push(token)
-            console.log("-> Set name to " + name)
-            await axios.post(`${PG_ADDR}/api/game/update`, {
-                uuid: gameState.uuid,
-                action: "name",
-                name: name,
-            }, {
-                cancelToken: token.token
-            })
+            ghostNameIsDirty = true
+            setGameState({...gameState, ghostName: name})
         } catch (error) {
             console.log(`error: ${error}`)
         }
     }
 
+    const postGhostName = async () => {
+        await axios.post(`${PG_ADDR}/api/game/update`, {
+            uuid: gameState.uuid,
+            action: "name",
+            name: gameState.ghostName,
+        })
+    }
+
     const setAloneGhost = async (isAloneGhost: bool3) => {
         try {
+            setGameState({...gameState, aloneGhost: isAloneGhost})
             return await axios.post(`${PG_ADDR}/api/game/update`, {
                 uuid: gameState.uuid,
                 action: "aloneghost",
@@ -97,6 +96,11 @@ export const ContextProvider = ({children}: ContextProviderModel) => {
             state.uuid = res.data.uuid
             state.aloneGhost = res.data.alone_ghost
             state.ghostName = (!res.data.ghost_name) ? "" : res.data.ghost_name
+            if (ghostNameIsDirty) {
+                postGhostName()
+                state.ghostName = gameState.ghostName
+                ghostNameIsDirty = false
+            }
 
             state.evidences = new Map<Evidence, bool3>()
             state.evidences.set(Evidence.fingerprints, parsePostgresState(res.data.fingerprints))
