@@ -1,4 +1,4 @@
-export class Evidence {
+export default class Evidence {
     public name: string;
     public rowName: string;
 

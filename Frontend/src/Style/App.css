@@ -4,14 +4,6 @@
   right: 2%;
 }
 
-.tableHeader {
-  column-span: 4;
-}
-
-.colSpan2 {
-  column-span: 2;
-}
-
 :root {
   --background-color: #212529;
   --background-color-alt: #383838;
@@ -25,10 +17,6 @@
   --true-color:  #66b266 ;
 }
 
-.container {
-  padding: 2%;
-}
-
 @font-face {
   font-family: 'october_crowregular';
   src: url('./october_crow-webfont.woff2') format('woff2'),
@@ -39,22 +27,19 @@
 
 
 
-body {
+/* body {
   background-color: var(--background-color);
   color: var(--text-color);
   font-family: 'Open Sans', sans-serif;
   font-size: 1.0em;
-}
+} */
 
-td {
-  padding: 5px;
-}
-
-tr {
+/* 
+#ghostTable td {
   border-bottom: 0.5px solid var(--table-border-color2);
-}
+} */
 
-th {
+/* th {
   padding: 5px 0 5px 0;
   font-family: 'october_crowregular', san serif;
   font-size: 1.5em;
@@ -63,39 +48,34 @@ th {
 }
 
 table {
-  border-collapse: collapse;
-  display: inline-block;
   vertical-align: top;
   margin: 0 10px 20px 10px;
-}
+} */
 
 .spookyFont {
   font-family: 'october_crowregular', san serif;
   font-size: 2em;
-
 }
 
-.chakra-select {
-  width: 100% !important;
-}
-.chakra-select__icon-wrapper {
-  display: none !important;
-}
 
-.nb {border-bottom: none!important;}
+/* .nb {border-bottom: none!important;} */
 
-#info {
+/* #info {
   display: inline;
-}
+} */
+/* 
+td:nth-of-type(1) {text-transform: uppercase;} */
 
-td:nth-of-type(1) {text-transform: uppercase;}
-
-#ghostTable td {width: 150px;}
+/* #ghostTable td {width: 150px;}
 #ghostTable td:nth-of-type(2),
 #ghostTable td:nth-of-type(3),
 #ghostTable td:nth-of-type(4) {text-align: center;}
 
-.included,
+#objectiveBoard td:nth-of-type(2),
+#objectiveBoard td:nth-of-type(3),
+#objectiveBoard td:nth-of-type(4){ text-align: center; } */
+
+/* .included,
 #selectionTable td:nth-of-type(2),
 #selectionTable th:nth-of-type(2),
 #objectiveBoard td:nth-of-type(2),
@@ -103,15 +83,17 @@ td:nth-of-type(1) {text-transform: uppercase;}
 
 .notPossible,
 #selectionTable td:nth-of-type(3),
-#selectionTable th:nth-of-type(3) {
+#selectionTable th:nth-of-type(3),
+#objectiveBoard th:nth-of-type(3),
+#objectiveBoard td:nth-of-type(3) {
   background-color: var(--false-color);
 }
 
 .excluded {
   text-decoration: line-through;
   color: var(--text-color-alt);
-}
-
+} */
+/* 
 .excludedObjective, .defaultObj {
   font-style: italic;
   color: var(--text-color-alt2);
@@ -121,15 +103,14 @@ td:nth-of-type(1) {text-transform: uppercase;}
   font-style: normal;
   color: var(--text-color);;
   text-decoration: line-through;
-}
-
+} */
+/* 
 .textbox {
-  /*float:right;*/
   color: var(--text-color);;
   background-color: var(--background-color-alt2);
   border: 1px solid var(--table-border-color2);;
   width: 70%;
-}
+} */
 
 .timerButton {
   width: 100%;
@@ -177,7 +158,7 @@ td:nth-of-type(1) {text-transform: uppercase;}
   background-color: var(--background-color-alt);
   transition: ease 1s;
 }
-.title {
+/* .title {
   font-family: 'october_crowregular', san serif;
   font-size: 3em;
 
@@ -185,7 +166,7 @@ td:nth-of-type(1) {text-transform: uppercase;}
 .subtitle {
   font-size: 1.5em;
   padding-left: 20px;
-}
-.content {
+} */
+/* .content {
   margin: 5px 20px 0 20px;
-}
+} */

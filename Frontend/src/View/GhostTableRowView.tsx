@@ -1,7 +1,8 @@
 import React, { FC } from 'react';
 import { useGameContext } from "../Model/GameContext";
-import { Evidence } from "../../../Shared Model/Evidence";
-import { Ghost } from "../../../Shared Model/Ghost";
+import Evidence from "../Model/Evidence";
+import Ghost from "../Model/Ghost";
+import { Text, Tr, Td } from '@chakra-ui/react';
 
 interface GhostTableRowViewModel {
     ghost: Ghost;
@@ -10,7 +11,7 @@ interface GhostTableRowViewModel {
 export const GhostTableRowView: FC<GhostTableRowViewModel> = ({ghost}) => {
 
     const { gameState } = useGameContext()
-
+ 
     const className = () => {
         if (Evidence.all
             .filter(e => ghost.requiredEvidence.find(ev => e === ev) === undefined)
@@ -32,29 +33,29 @@ export const GhostTableRowView: FC<GhostTableRowViewModel> = ({ghost}) => {
     }
 
     const color = (evidence: Evidence) => {
-        const state = gameState.evidences.get(evidence)
-        switch (state) {
-            case true:
-                return "included"
-            case false:
-                return "excluded"
-            case undefined:
-                return "none"
+        switch (gameState.evidences.get(evidence)) {
+            case true: return "included"
+            case false: return "excluded"
+            default: return "none"
         }
     }
 
+    const padding = 1
+
     return (
-        <tr>
-            <td className={className()}>
-                {ghost.name}
-            </td>
+        <Tr>
+            <Td pt={padding} pb={padding}  className={className()}>
+                <Text fontWeight="medium" textTransform="uppercase">
+                    {ghost.name}
+                </Text>
+            </Td>
             {
-                ghost.requiredEvidence.map(evidence =>
-                    <td key={ghost.name + evidence.name} className={color(evidence)}>
-                        {evidence.name}
-                    </td>
+                ghost.requiredEvidence.map(evidence => 
+                    <Td layerStyle={color(evidence)} w={250} pt={0} pb={0} textAlign="center" key={ghost.name + evidence.name}>
+                        <Text fontSize="sm">{evidence.name}</Text>
+                    </Td>
                 )
             }
-        </tr>
+        </Tr>
     )
 }

@@ -1,6 +1,6 @@
-import {Evidence} from "./Evidence";
+import Evidence from "./Evidence";
 
-export class Ghost {
+export default class Ghost {
     public name: string;
     public requiredEvidence: [Evidence, Evidence, Evidence];
 

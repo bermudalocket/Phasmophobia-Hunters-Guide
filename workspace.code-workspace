@@ -10,7 +10,7 @@
 			{
 				"label": "database",
 				"type": "shell",
-				"command": "cd db && npm start",
+				"command": "cd Database && npm start",
 				"problemMatcher": [
 					"$tsc-watch"
 				],
@@ -19,7 +19,11 @@
 			{
 				"label": "app",
 				"type": "shell",
-				"command": "cd phasmo && npm start"
+				"command": "cd Frontend && npm start",
+				"problemMatcher": [
+					"$tsc-watch"
+				],
+				"isBackground": true
 			}
 		]
 	}

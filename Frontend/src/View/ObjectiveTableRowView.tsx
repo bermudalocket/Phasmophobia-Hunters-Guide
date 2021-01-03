@@ -1,7 +1,9 @@
-import React from "react";
+import React, { ReactText } from "react";
 import { FC } from "react";
 import { useGameContext } from "../Model/GameContext";
-import { Objective } from "../../../Shared Model/Objective";
+import Objective from "../Model/Objective";
+import { RadioGroup, Radio, Text, Td, Tr, HStack } from "@chakra-ui/react"
+import ObjectiveState from "../Model/ObjectiveState";
 
 interface ObjectiveTableRowViewModel {
     objective: Objective
@@ -11,30 +13,33 @@ export const ObjectiveTableRowView: FC<ObjectiveTableRowViewModel> = ({objective
 
     const context = useGameContext()
 
-    const className = (objective: Objective) => {
-        return (objective === Objective.main) ? "" : "defaultObj"
+    const setValue = (nextValue: ReactText) => {
+        let newState = ObjectiveState.irrelevant
+        switch (nextValue) {
+            case "yes": newState = ObjectiveState.yes; break;
+            case "no": newState = ObjectiveState.no; break;
+            case "started": newState = ObjectiveState.started; break;
+            case "irrelevant": newState = ObjectiveState.irrelevant; break;
+        }
+        context.setObjective(objective, newState)
     }
 
     return (
-        <tr key={objective.rowName}>
-            <td className={className(objective)}>
-                {objective.text}
-            </td>
-            <td>
-                <input type="radio"
-                       name={objective.rowName}
-                       value="true"
-                       checked={context.gameState.objectives.get(objective) === true}
-                       onChange={() => { context.setObjective(objective, true) }} />
-            </td>
-            <td>
-                <input type="radio"
-                       name={objective.rowName}
-                       value="false"
-                       checked={context.gameState.objectives.get(objective) === false}
-                       onChange={() => { context.setObjective(objective, false) }} />
-            </td>
-        </tr>
+        <Tr>
+            <Td pt={2} pb={2}>
+                <Text textTransform="uppercase">{objective.text}</Text>
+            </Td>
+            <Td pt={1} pb={1}>
+                <RadioGroup onChange={setValue} value={context.gameState.objectives.get(objective)?.toString()}>
+                    <HStack>
+                        <Radio value="yes" colorScheme="green" w={4} h={4} />
+                        <Radio value="no" colorScheme="red" w={4} h={4} />
+                        <Radio value="started" colorScheme="blue" w={4} h={4} />
+                        <Radio value="irrelevant" colorScheme="gray" w={4} h={4} />
+                    </HStack>
+                </RadioGroup>
+            </Td>
+        </Tr>
     )
 
 }

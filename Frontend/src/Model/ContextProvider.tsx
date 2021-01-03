@@ -1,10 +1,12 @@
-import { AxiosResponse, CancelTokenSource } from "axios";
+import { AxiosResponse } from "axios";
 import React, { ReactNode, useEffect } from "react";
 import { AppState } from "./AppState";
-import { Evidence } from "../../../Shared Model/Evidence";
-import { Objective } from "../../../Shared Model/Objective";
+import Evidence from "./Evidence";
+import Objective from "./Objective";
 import { bool3, PG_ADDR } from "../index"
 import { GameContext } from "./GameContext";
+import ObjectiveState from "./ObjectiveState";
+import { useToast } from "@chakra-ui/react";
 const axios = require("axios").default;
 
 type ContextProviderModel = {
@@ -13,21 +15,20 @@ type ContextProviderModel = {
 
 export const ContextProvider = ({children}: ContextProviderModel) => {
 
+    const toast = useToast()
+
     const [gameState, setGameState] = React.useState(new AppState())
 
     let ghostNameIsDirty = false
 
-    const setGhostName = async (name: string) => {
-        try {
-            ghostNameIsDirty = true
-            setGameState({...gameState, ghostName: name})
-        } catch (error) {
-            console.log(`error: ${error}`)
-        }
+    const setGhostName = (name: string) => {
+        ghostNameIsDirty = true
+        setGameState({...gameState, ghostName: name})
     }
 
     const postGhostName = async () => {
-        await axios.post(`${PG_ADDR}/api/game/update`, {
+        console.log("posting")
+        axios.post(`${PG_ADDR}/api/game/update`, {
             uuid: gameState.uuid,
             action: "name",
             name: gameState.ghostName,
@@ -47,7 +48,7 @@ export const ContextProvider = ({children}: ContextProviderModel) => {
         }
     }
 
-    const setObjective = async (objective: Objective, state?: boolean) => {
+    const setObjective = async (objective: Objective, state: ObjectiveState) => {
         let objectives = gameState.objectives
         objectives.set(objective, state)
         setGameState({...gameState, objectives: objectives})
@@ -67,7 +68,6 @@ export const ContextProvider = ({children}: ContextProviderModel) => {
         let evidences = gameState.evidences
         evidences.set(evidence, evidenceState)
         setGameState({...gameState, evidences: evidences})
-        console.log("evidence: " + evidence + " to " + evidenceState)
         try {
             await axios.post(`${PG_ADDR}/api/game/update`, {
                 uuid: gameState.uuid,
@@ -90,42 +90,64 @@ export const ContextProvider = ({children}: ContextProviderModel) => {
                 case null: case undefined: case "unknown": return undefined
             }
         }
+        const parseObjective = (objective: string): ObjectiveState => {
+            switch (objective) {
+                case "yes": return ObjectiveState.yes
+                case "no": return ObjectiveState.no
+                case "started": return ObjectiveState.started
+                case "irrelevant": return ObjectiveState.irrelevant
+            }
+            return ObjectiveState.irrelevant
+        }
         try {
             let res = await axios.get(`${PG_ADDR}/api/game/${gameState.uuid}`)
-            let state = new AppState()
-            state.uuid = res.data.uuid
-            state.aloneGhost = res.data.alone_ghost
-            state.ghostName = (!res.data.ghost_name) ? "" : res.data.ghost_name
+            let newState = new AppState()
+            newState.uuid = res.data.uuid
+            newState.isLoading = false
+            newState.aloneGhost = res.data.alone_ghost
+            newState.ghostName = (!res.data.ghost_name) ? "" : res.data.ghost_name
+            console.log("updating: is ghost name dirty?")
             if (ghostNameIsDirty) {
+                console.log("yes")
                 postGhostName()
-                state.ghostName = gameState.ghostName
+                newState.ghostName = gameState.ghostName
                 ghostNameIsDirty = false
             }
 
-            state.evidences = new Map<Evidence, bool3>()
-            state.evidences.set(Evidence.fingerprints, parsePostgresState(res.data.fingerprints))
-            state.evidences.set(Evidence.freezing, parsePostgresState(res.data.freezing))
-            state.evidences.set(Evidence.emf5, parsePostgresState(res.data.emf5))
-            state.evidences.set(Evidence.orbs, parsePostgresState(res.data.orbs))
-            state.evidences.set(Evidence.spiritBox, parsePostgresState(res.data.spirit_box))
-            state.evidences.set(Evidence.ghostWriting, parsePostgresState(res.data.ghost_writing))
+            newState.evidences = new Map<Evidence, bool3>()
+            newState.evidences.set(Evidence.fingerprints, parsePostgresState(res.data.fingerprints))
+            newState.evidences.set(Evidence.freezing, parsePostgresState(res.data.freezing))
+            newState.evidences.set(Evidence.emf5, parsePostgresState(res.data.emf5))
+            newState.evidences.set(Evidence.orbs, parsePostgresState(res.data.orbs))
+            newState.evidences.set(Evidence.spiritBox, parsePostgresState(res.data.spirit_box))
+            newState.evidences.set(Evidence.ghostWriting, parsePostgresState(res.data.ghost_writing))
 
-            state.objectives = new Map<Objective, bool3>()
-            state.objectives.set(Objective.main, parsePostgresState(res.data.obj_main))
-            state.objectives.set(Objective.ghostEvent, parsePostgresState(res.data.obj_ghostevent))
-            state.objectives.set(Objective.ghostPhoto, parsePostgresState(res.data.obj_ghostphoto))
-            state.objectives.set(Objective.dirtyWater, parsePostgresState(res.data.obj_dirtywater))
-            state.objectives.set(Objective.emf, parsePostgresState(res.data.obj_emf))
-            state.objectives.set(Objective.coldRoom, parsePostgresState(res.data.obj_coldroom))
-            state.objectives.set(Objective.motionSensor, parsePostgresState(res.data.obj_motionsensor))
-            state.objectives.set(Objective.smudgeSticks, parsePostgresState(res.data.obj_smudgesticks))
-            state.objectives.set(Objective.crucifix, parsePostgresState(res.data.obj_crucifix))
-            state.objectives.set(Objective.salt, parsePostgresState(res.data.obj_salt))
+            newState.objectives = new Map<Objective, ObjectiveState>()
+            newState.objectives.set(Objective.main, parseObjective(res.data.obj_main))
+            newState.objectives.set(Objective.ghostEvent, parseObjective(res.data.obj_ghostevent))
+            newState.objectives.set(Objective.ghostPhoto, parseObjective(res.data.obj_ghostphoto))
+            newState.objectives.set(Objective.dirtyWater, parseObjective(res.data.obj_dirtywater))
+            newState.objectives.set(Objective.emf, parseObjective(res.data.obj_emf))
+            newState.objectives.set(Objective.coldRoom, parseObjective(res.data.obj_coldroom))
+            newState.objectives.set(Objective.motionSensor, parseObjective(res.data.obj_motionsensor))
+            newState.objectives.set(Objective.smudgeSticks, parseObjective(res.data.obj_smudgesticks))
+            newState.objectives.set(Objective.crucifix, parseObjective(res.data.obj_crucifix))
+            newState.objectives.set(Objective.salt, parseObjective(res.data.obj_salt))
 
-            const isDiff = gameState.isDiff(state)
-            console.log("==== IS DIFF? " + isDiff)
-            if (isDiff) {
-                setGameState(state)
+            if (!gameState.isLoading) {
+                if (gameState.aloneGhost !== newState.aloneGhost) {
+                    toast({
+                        title: "Update",
+                        description: "Ghost shyness is now " + newState.aloneGhost,
+                        status: "success",
+                        duration: 5000,
+                        isClosable: true,
+                    })
+                }
+            }
+
+            if (gameState.isDiff(newState)) {
+                setGameState(newState)
             }
         } catch(error) {
             console.log("UPDATE ERROR: " + error)
@@ -133,8 +155,6 @@ export const ContextProvider = ({children}: ContextProviderModel) => {
     }
 
     useEffect(() => {
-        console.log("---> GAMEPROVIDER RE-RENDERED")
-        update()
         const updater = setInterval(update, 2500)
         return () => clearInterval(updater)
     })

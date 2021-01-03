@@ -1,3 +1,4 @@
+import { ChakraProvider } from '@chakra-ui/react';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { ContextProvider } from "./Model/ContextProvider";
@@ -42,9 +43,11 @@ async function launch() {
         }
     } else {
         ReactDOM.render(
-            <ContextProvider>
-                <Main uuid={GAME_ID} />
-            </ContextProvider>,
+            <ChakraProvider>
+                <ContextProvider>
+                    <Main uuid={GAME_ID} />
+                </ContextProvider>
+            </ChakraProvider>,
             document.getElementById("rx-content")
         )
     }
