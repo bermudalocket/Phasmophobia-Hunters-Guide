@@ -19,15 +19,11 @@ export const ContextProvider = ({children}: ContextProviderModel) => {
 
     const [gameState, setGameState] = React.useState(new AppState())
 
-    let ghostNameIsDirty = false
-
     const setGhostName = (name: string) => {
-        ghostNameIsDirty = true
-        setGameState({...gameState, ghostName: name})
+        setGameState({...gameState, ghostNameIsDirty: true, ghostName: name})
     }
 
     const postGhostName = async () => {
-        console.log("posting")
         axios.post(`${PG_ADDR}/api/game/update`, {
             uuid: gameState.uuid,
             action: "name",
@@ -106,12 +102,10 @@ export const ContextProvider = ({children}: ContextProviderModel) => {
             newState.isLoading = false
             newState.aloneGhost = res.data.alone_ghost
             newState.ghostName = (!res.data.ghost_name) ? "" : res.data.ghost_name
-            console.log("updating: is ghost name dirty?")
-            if (ghostNameIsDirty) {
-                console.log("yes")
+            if (gameState.ghostNameIsDirty) {
                 postGhostName()
                 newState.ghostName = gameState.ghostName
-                ghostNameIsDirty = false
+                newState.ghostNameIsDirty = false
             }
 
             newState.evidences = new Map<Evidence, bool3>()

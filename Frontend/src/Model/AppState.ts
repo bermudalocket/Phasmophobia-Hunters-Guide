@@ -8,6 +8,7 @@ export class AppState {
     // meta
     isLoading = true
     colorMode = "dark"
+    ghostNameIsDirty = false
 
     // game
     uuid = ""
