@@ -129,7 +129,7 @@ app.get("/api/game/:uuid", async (req, res) => {
         if (rows.length === 0) {
             res.send("NAW");
         } else {
-            const name = await client.query("SELECT new_value FROM mutations WHERE game=$1 ORDER BY timestamp DESC LIMIT 1", [uuid]);
+            const name = await client.query("SELECT new_value FROM mutations WHERE game=$1 AND type='name' ORDER BY timestamp DESC LIMIT 1", [uuid]);
             let game = rows[0]
             game.ghost_name = name.rows[0].new_value
             res.send(game);
