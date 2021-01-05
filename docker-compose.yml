@@ -1,0 +1,49 @@
+version: "3.7"
+
+networks:
+  phasmonet:
+
+services:
+  phasmodb:
+    container_name: phasmodb
+    image: phasmo-db:latest
+    depends_on:
+      - postgres
+    restart: unless-stopped
+    networks:
+      - phasmonet
+    environment:
+      - PGHOST=postgres
+      - PGUSER=phasmouser
+      - PGPASSWORD=phasmopass
+      - PGDATABASE=phasmo
+      - PGPORT=5432
+    ports:
+      - 3001:3001
+  phasmo:
+    container_name: phasmofrontend
+    image: phasmo:latest
+    networks:
+      - phasmonet
+    depends_on:
+      - postgres
+    restart: unless-stopped
+    ports:
+      - 3000:3000
+  postgres:
+    container_name: postgres
+    image: postgres:13-alpine
+    restart: unless-stopped
+    networks:
+      - phasmonet
+    environment:
+      - POSTGRES_USER=phasmouser
+      - POSTGRES_PASSWORD=phasmopass
+      - POSTGRES_DB=phasmo
+    volumes:
+      - ./Database/.data:/var/lib/postgresql/data
+      - ./Database/phasmo-schema.sql:/docker-entrypoint-initdb.d/phasmo-schema.sql
+    expose:
+      - 5432
+    ports:
+      - 5432:5432

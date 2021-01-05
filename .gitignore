@@ -7,3 +7,4 @@ workspace.code-workspace
 **/glyphs/
 .vscode
 **/build
+**/.data

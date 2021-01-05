@@ -149,6 +149,7 @@ export const ContextProvider = ({children}: ContextProviderModel) => {
     }
 
     useEffect(() => {
+        update()
         const updater = setInterval(update, 2500)
         return () => clearInterval(updater)
     })

@@ -131,7 +131,9 @@ app.get("/api/game/:uuid", async (req, res) => {
         } else {
             const name = await client.query("SELECT new_value FROM mutations WHERE game=$1 AND type='name' ORDER BY timestamp DESC LIMIT 1", [uuid]);
             let game = rows[0]
-            game.ghost_name = name.rows[0].new_value
+            if (name.rows.length > 0) {
+                game.ghost_name = name.rows[0].new_value
+            }
             res.send(game);
             // await client.query("DELETE FROM visitors WHERE visitor=$1", [id])
             client.query("INSERT INTO visitors (visitor, timestamp, game) VALUES($1, CURRENT_TIMESTAMP, $2)", [
