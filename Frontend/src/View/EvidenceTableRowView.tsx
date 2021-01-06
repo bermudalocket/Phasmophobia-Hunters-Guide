@@ -2,7 +2,7 @@ import React, { FC, ReactText } from 'react';
 import { useGameContext } from "../Model/GameContext";
 import Evidence from "../Model/Evidence";
 import { Text, Tr, Td, RadioGroup, HStack, Radio } from '@chakra-ui/react';
-import { bool3 } from '..';
+import bool3 from '../Model/bool3';
 
 interface EvidenceTableRowViewModel {
     evidence: Evidence

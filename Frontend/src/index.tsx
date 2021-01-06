@@ -6,15 +6,6 @@ import './Style/App.css'
 import { Main } from "./View/MainView";
 
 // ----------------------------------------------------------------------------
-// GLOBAL
-
-// convenience type
-export type bool3 = boolean | undefined
-
-// represents a boolean sent by postgres (true, false, null)
-export type pgbool = boolean | null
-
-// ----------------------------------------------------------------------------
 // ENVIRONMENT
 
 export const PG_ADDR = (process.env.NODE_ENV === "production") ? "https://www.bermudalocket.com" : "http://localhost:3001"

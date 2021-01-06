@@ -1,9 +1,9 @@
-import { bool3 } from "../index";
+import bool3 from "./bool3"
 import Evidence from "./Evidence";
 import Objective from "./Objective";
 import ObjectiveState from "./ObjectiveState";
 
-export class AppState {
+export default class AppState {
 
     // meta
     isLoading = true

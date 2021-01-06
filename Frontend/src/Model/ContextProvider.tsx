@@ -1,12 +1,13 @@
 import { AxiosResponse } from "axios";
 import React, { ReactNode, useEffect } from "react";
-import { AppState } from "./AppState";
+import AppState from "./AppState";
 import Evidence from "./Evidence";
 import Objective from "./Objective";
-import { bool3, PG_ADDR } from "../index"
+import { PG_ADDR } from "../index"
 import { GameContext } from "./GameContext";
 import ObjectiveState from "./ObjectiveState";
 import { useToast } from "@chakra-ui/react";
+import bool3 from "./bool3";
 const axios = require("axios").default;
 
 type ContextProviderModel = {
@@ -79,13 +80,6 @@ export const ContextProvider = ({children}: ContextProviderModel) => {
     }
 
     const update = async () => {
-        const parsePostgresState = (state: boolean | string | null) => {
-            switch (state) {
-                case true: case "yes": return true
-                case false: case "no": return false
-                case null: case undefined: case "unknown": return undefined
-            }
-        }
         const parseObjective = (objective: string): ObjectiveState => {
             switch (objective) {
                 case "yes": return ObjectiveState.yes
@@ -109,12 +103,12 @@ export const ContextProvider = ({children}: ContextProviderModel) => {
             }
 
             newState.evidences = new Map<Evidence, bool3>()
-            newState.evidences.set(Evidence.fingerprints, parsePostgresState(res.data.fingerprints))
-            newState.evidences.set(Evidence.freezing, parsePostgresState(res.data.freezing))
-            newState.evidences.set(Evidence.emf5, parsePostgresState(res.data.emf5))
-            newState.evidences.set(Evidence.orbs, parsePostgresState(res.data.orbs))
-            newState.evidences.set(Evidence.spiritBox, parsePostgresState(res.data.spirit_box))
-            newState.evidences.set(Evidence.ghostWriting, parsePostgresState(res.data.ghost_writing))
+            newState.evidences.set(Evidence.fingerprints, res.data.fingerprints)
+            newState.evidences.set(Evidence.freezing, res.data.freezing)
+            newState.evidences.set(Evidence.emf5, res.data.emf5)
+            newState.evidences.set(Evidence.orbs, res.data.orbs)
+            newState.evidences.set(Evidence.spiritBox, res.data.spirit_box)
+            newState.evidences.set(Evidence.ghostWriting, res.data.ghost_writing)
 
             newState.objectives = new Map<Objective, ObjectiveState>()
             newState.objectives.set(Objective.main, parseObjective(res.data.obj_main))

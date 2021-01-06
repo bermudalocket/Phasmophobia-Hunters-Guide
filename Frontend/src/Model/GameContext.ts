@@ -1,6 +1,6 @@
 import React from "react";
-import { bool3 } from "../index";
-import { AppState } from "./AppState";
+import AppState from "./AppState";
+import bool3 from "./bool3";
 import Evidence from "./Evidence";
 import Objective from "./Objective";
 import ObjectiveState from "./ObjectiveState";
