@@ -2,7 +2,8 @@ import React, { FC } from 'react';
 import { useGameContext } from "../Model/GameContext";
 import Evidence from "../Model/Evidence";
 import Ghost from "../Model/Ghost";
-import { Text, Tr, Td, Icon, Circle, HStack, VisuallyHidden, Box } from '@chakra-ui/react';
+import { Text, Tr, Td, Icon, HStack, Box } from '@chakra-ui/react';
+import { CheckIcon, CloseIcon } from '@chakra-ui/icons';
 
 interface GhostTableRowViewModel {
     ghost: Ghost;
@@ -27,15 +28,14 @@ export const GhostTableRowView: FC<GhostTableRowViewModel> = ({ghost}) => {
     const matchedEvidence = ghost.requiredEvidence
         .filter(e => gameState.evidences.get(e) === true)
         .length
-
-    const isRuledOut = ghost.requiredEvidence
-        .filter(e => gameState.evidences.get(e) === false)
-        .length > 0
  
     const className = () => {
-        if (ghost.requiredEvidence
-            .filter(e => gameState.evidences.get(e) === false)
-            .length > 0) {
+        if (ghost.requiredEvidence.some(e => gameState.evidences.get(e) === false)) {
+            return "red.400"
+        }
+        if (gameState.positiveEvidence()
+            .some(e => !ghost.requiredEvidence.some(ev => ev === e))
+        ) {
             return "red.400"
         }
         if (ghost.requiredEvidence
@@ -46,6 +46,10 @@ export const GhostTableRowView: FC<GhostTableRowViewModel> = ({ghost}) => {
         return "none"
     }
 
+    const isRuledOut = (() => {
+        return className() === "red.400"
+    })()
+
     const color = (evidence: Evidence) => {
         switch (gameState.evidences.get(evidence)) {
             case true: return "green.400"
@@ -55,25 +59,30 @@ export const GhostTableRowView: FC<GhostTableRowViewModel> = ({ghost}) => {
     }
 
     const padding = 1
+    const colorDotEvidenceMatched = "green.400"
 
     return (
         <Tr>
             <Td pt={padding} pb={padding} bgColor={className()}>
                 <HStack spacing={1}>
-                    <Text pr={1} fontWeight="medium" textTransform="uppercase">
+                    <Text as={isRuledOut ? "del" : "text"} fontWeight="medium" textTransform="uppercase">
                         {ghost.name}
                     </Text>
-                    <Box hidden={isRuledOut}>
-                        <CircleIcon color={matchedEvidence >= 1 ? "white.400" : "black" } />
-                        <CircleIcon color={matchedEvidence >= 2 ? "white.400" : "gray.500" } />
-                        <CircleIcon color={matchedEvidence >= 3 ? "white.400" : "gray.600" } />
+                    <Box hidden={isRuledOut || gameState.positiveEvidence().length === 0}>
+                        <CircleIcon color={matchedEvidence >= 1 ? colorDotEvidenceMatched : "gray.400" } />
+                        <CircleIcon color={matchedEvidence >= 2 ? colorDotEvidenceMatched : "gray.400" } />
+                        <CircleIcon color={matchedEvidence >= 3 ? colorDotEvidenceMatched : "gray.400" } />
                     </Box>
                 </HStack>
             </Td>
             {
                 ghost.requiredEvidence.map(evidence => 
                     <Td w={250} pt={0} pb={0} textAlign="center" key={ghost.name + evidence.name}>
-                        <Text color={color(evidence)} fontSize="xs">{evidence.name}</Text>
+                        <CheckIcon color="green.400" opacity={isRuledOut ? 0.45 : 1.0} pr={1} w={3} h={2} hidden={gameState.evidences.get(evidence) !== true} />
+                        <CloseIcon color="red.400" opacity={isRuledOut ? 0.45 : 1.0} pr={1} w={3} h={2} hidden={gameState.evidences.get(evidence) !== false} />
+
+
+                        <Text as={isRuledOut ? "del" : "text"} opacity={isRuledOut ? 0.15 : 1.0} color={color(evidence)} fontSize="xs">{evidence.name}</Text>
                     </Td>
                 )
             }

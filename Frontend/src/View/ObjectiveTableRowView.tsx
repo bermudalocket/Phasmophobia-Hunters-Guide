@@ -30,7 +30,7 @@ export const ObjectiveTableRowView: FC<ObjectiveTableRowViewModel> = ({objective
                 <Text textTransform="uppercase">{objective.text}</Text>
             </Td>
             <Td pt={1} pb={1}>
-                <RadioGroup onChange={setValue} value={context.gameState.objectives.get(objective)?.toString()}>
+                <RadioGroup onChange={setValue} value={context.gameState.objectives.get(objective) ?? "undefined"}>
                     <HStack>
                         <Radio value="yes" colorScheme="green" w={4} h={4} />
                         <Radio value="no" colorScheme="red" w={4} h={4} />

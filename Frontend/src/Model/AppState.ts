@@ -18,7 +18,17 @@ export class AppState {
     photos = new Map<String, bool3>()
     objectives = new Map<Objective, ObjectiveState>()
 
-    gameVisitors: Array<string> = []
+    // gameVisitors: Array<string> = []
+
+    positiveEvidence = () => {
+        let positives = new Array<Evidence>()
+        for (let [evidence, evidenceState] of this.evidences) {
+            if (evidenceState === true) {
+                positives.push(evidence)
+            }
+        }
+        return positives
+    }
 
     /**
      * Returns true if React should redraw the view tree with the new state.
