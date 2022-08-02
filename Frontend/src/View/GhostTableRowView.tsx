@@ -78,10 +78,12 @@ export const GhostTableRowView: FC<GhostTableRowViewModel> = ({ghost}) => {
             {
                 ghost.requiredEvidence.map(evidence => 
                     <Td w={250} pt={0} pb={0} textAlign="center" key={ghost.name + evidence.name}>
-                        <CheckIcon color="green.400" opacity={isRuledOut ? 0.45 : 1.0} pr={1} w={3} h={2} hidden={gameState.evidences.get(evidence) !== true} />
-                        <CloseIcon color="red.400" opacity={isRuledOut ? 0.45 : 1.0} pr={1} w={3} h={2} hidden={gameState.evidences.get(evidence) !== false} />
-
-
+                        {
+                            gameState.evidences.get(evidence) === true ? <CheckIcon color="green.400" opacity={isRuledOut ? 0.45 : 1.0} pr={1} w={3} h={2} /> : null
+                        }
+                        {
+                            gameState.evidences.get(evidence) === false ? <CloseIcon color="red.400" opacity={isRuledOut ? 0.45 : 1.0} pr={1} w={3} h={2} /> : null
+                        }
                         <Text as={isRuledOut ? "del" : "text"} opacity={isRuledOut ? 0.15 : 1.0} color={color(evidence)} fontSize="xs">{evidence.name}</Text>
                     </Td>
                 )

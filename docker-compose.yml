@@ -6,7 +6,7 @@ networks:
 services:
   phasmodb:
     container_name: phasmodb
-    image: phasmo-db:latest
+    image: phasmodb:staging
     depends_on:
       - postgres
     restart: unless-stopped
@@ -22,7 +22,7 @@ services:
       - 3001:3001
   phasmo:
     container_name: phasmofrontend
-    image: phasmo:latest
+    image: phasmoapp:staging
     networks:
       - phasmonet
     depends_on:

@@ -47,10 +47,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "request": "^2.88.2",
-    "request-debug": "^0.2.0",
-    "react-dom": "^17.0.1"
   }
 }
