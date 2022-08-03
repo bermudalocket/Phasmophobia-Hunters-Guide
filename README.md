@@ -1,4 +1,4 @@
-## start.sh
+#### `start.sh`
 
 The start script will
 
@@ -8,9 +8,11 @@ The start script will
 
 ### Notes
 
-- At this point this is an old project and hasn't been maintained. It will likely not work with modern versions of Node. Dependency conflicts abound when using React 17+ with ChakraUI. **For this reason it's highly recommended to use Docker to get a full and accurate snapshot of this project's functionality.**
-- Since this project is two years old and I have grown as a developer in that time, there are some things I can identify that I would do differently. For example, I would likely use a WebSocket-based messaging system with session instancing controlled by a single client, rather than relying on a centrally-controlled relational database being polled by all clients on a timer.
-- CORS expects this to be run out of `localhost`. If you encounter CORS errors, you may need to make changes to the array `CORS_WHITELIST` on line 20 of `Database/index.ts`.
+- At this point this is an old project and hasn't been maintained . It will likely not work with modern versions of Node. Dependency conflicts abound when using React 17+ with ChakraUI. **For this reason it's highly recommended to use Docker to get a full and accurate snapshot of this project's functionality.**
+- Since this project is two years old and I have grown as a developer in that time, there are some things I can identify that I would do differently. For example, 
+    - I would likely use a WebSocket-based messaging system with session instancing controlled by a single client, rather than relying on a centrally-controlled relational database being polled by all clients on a timer. This is especially true since it is quite literally useless to persist a game for more than its lifetime.
+    - Postgres queries should be prepared statements to harden against SQL injection.
+- CORS expects this to be run out of `localhost`. If you encounter CORS errors, you may need to make changes to the array `CORS_WHITELIST` on line 20 of `Database/index.ts`. 
 - The database schema is included at `Database/phasmo-schema.sql` and, when using Docker, will be automatically loaded (line 45 of composefile). Otherwise it'll need to be loaded manually with `psql phasmo-schema.sql [id args]`.
 
 ### Flow
