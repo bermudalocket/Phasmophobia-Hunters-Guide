@@ -8,6 +8,20 @@ The start script will
 2. build `phasmoapp` image from `Frontend/`,
 3. start the stack with `docker-compose`.
 
+```
+cd Database
+docker build -t phasmodb .
+docker tag phasmodb:latest phasmodb:staging
+cd ..
+
+cd Frontend
+docker build -t phasmoapp .
+docker tag phasmoapp:latest phasmoapp:staging
+cd ..
+
+docker-compose up
+```
+
 ### Notes
 
 - At this point this is an old project and hasn't been maintained . It will likely not work with modern versions of Node. Dependency conflicts abound when using React 17+ with ChakraUI. **For this reason it's highly recommended to use Docker to get a full and accurate snapshot of this project's functionality.**
