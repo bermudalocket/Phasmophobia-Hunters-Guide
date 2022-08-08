@@ -1,3 +1,5 @@
+Live demo - https://bermudalocket.com
+
 Demo (9.7 MB) - https://github.com/bermudalocket/Phasmophobia-Hunters-Guide/blob/main/Demo.mp4
 
 #### `start.sh`
